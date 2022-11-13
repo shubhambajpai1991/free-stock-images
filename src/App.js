@@ -9,7 +9,7 @@ function App() {
     const [searchKey, setSearchKey] = React.useState('');
     const [page, setPage] = React.useState(1);
 
-    const fetchMedia = async () => {
+    const fetchMedia = React.useCallback(async () => {
         const media = await axios.get(
             `https://pixabay.com/api/?key=${
                 process.env.REACT_APP_PIXABAY_API_KEY
@@ -19,7 +19,7 @@ function App() {
         if (media && media.data && media.data.hits) {
             setMediaList((current) => [...current, ...media.data.hits]);
         }
-    };
+    }, [page, searchKey]);
 
     const reset = () => {
         setMediaList([]);
@@ -39,7 +39,7 @@ function App() {
 
     React.useEffect(() => {
         fetchMedia();
-    }, [page, searchKey]);
+    }, [fetchMedia, page, searchKey]);
 
     return (
         <div>
